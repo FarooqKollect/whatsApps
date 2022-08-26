@@ -61,6 +61,7 @@ router.post('/meta_wa_callbackurl', async (req, res) => {
             let incomingMessage = data.message;
             let typeOfMsg = incomingMessage.type; // extract the type of message (some are text, others are images, others are responses to buttons etc...)
             let media_url = ''; //create media url
+            let imageBinry = 'testing only'; //initiate binary for image
             let recipientPhone = incomingMessage.from.phone; // extract the phone number of sender
             let recipientName = incomingMessage.from.name;
             let message_id = incomingMessage.message_id; // extract the message id
@@ -119,10 +120,11 @@ router.post('/meta_wa_callbackurl', async (req, res) => {
                 const url = `https://graph.facebook.com/v14.0/${media_id}`;
 
                 let media_request = await axios.get(url, config);
-                media_url = await media_request.data.url;cd 
+                media_url = await media_request.data.url;
                 
+
                 //save image
-                
+
                 //###########################################must be completed later#############################
                 //console.log(incomingMessage);
                 //###############################################################################################
@@ -154,7 +156,7 @@ router.post('/meta_wa_callbackurl', async (req, res) => {
                     media_url = await media_request.data.url;
                     let image = await axios.get(media_url, config);
                     //save image
-                    await  fs.writeFile('logo.png', image, 'binary', function(err){
+                    await fs.writeFile('logo.png', image, 'binary', function (err) {
                         if (err) throw err
                         console.log('File saved.')
                     })
@@ -267,4 +269,7 @@ router.post('/meta_wa_callbackurl', async (req, res) => {
 let getUsersAll = (req, res) => {
     console.log("for future use")
 }
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname +'/'+ 'index.html'));
+})
 module.exports = { router, getUsersAll };
